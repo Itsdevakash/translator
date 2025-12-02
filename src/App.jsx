@@ -31,8 +31,6 @@ useEffect(() => {
   
   const translateNow = async (e)=>{
     e.preventDefault()
-
-    alert(form.lang);
     if(form.lang === "" || form.lang === "Choose language")
     {
       toast.error('Please choose a language')

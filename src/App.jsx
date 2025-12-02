@@ -1,10 +1,27 @@
 import { Copy, Languages, LoaderCircle } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useState,useEffect ,useRef  } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
+import { languageOptions } from "./languages";
 import axios from "axios"
 const API_KEY = "AIzaSyBv65qwMmgyN-sLta89GVdhi0LwNuCUa9U";
 
-const App = () => {
+function App() {
+const selectRef = useRef(null);
+useEffect(() => {
+  const $select = window.$(selectRef.current); 
+  $select.select2({ width: "100%" });
+  $select.on("change", function () {
+    setForm(prev => ({
+      ...prev,
+      lang: $select.val()
+    }));
+  });
+  return () => {
+    $select.select2("destroy");
+  };
+}, []);
+
+ 
   const [form, setForm] = useState({
     text: '',
     lang: ''
@@ -14,6 +31,8 @@ const App = () => {
   
   const translateNow = async (e)=>{
     e.preventDefault()
+
+    alert(form.lang);
     if(form.lang === "" || form.lang === "Choose language")
     {
       toast.error('Please choose a language')
@@ -72,23 +91,27 @@ const App = () => {
             <textarea name="text" placeholder="Your content goes here..." onChange={handleChange} required className='p-3 text-white bg-slate-900 w-full rounded-xl focus:outline-none focus:border focus:border-2 focus:border-amber-500 placeholder-amber-50' rows={5}>
 
             </textarea>
-            <select name="lang" onChange={handleChange} required className='p-3 text-white bg-slate-900 w-full rounded-xl focus:outline-none focus:border focus:border-2 focus:border-amber-500 placeholder-amber-50'>
-              <option>Choose language</option>
-              <option value="hindi">Hindi</option>
-              <option value="spanish">Spanish</option>
-              <option value="french">French</option>
-              <option value="english">English</option>
-              <option value="bhojpuri">Bhojpuri</option>
-              <option value="maithili">Maithili</option>
-            </select>
+
+                <select
+                  ref={selectRef}
+                  className="p-3 w-full rounded-xl bg-slate-900 text-white"
+                >
+                  <option value="">Choose language</option>
+                  {languageOptions.map((item, index) => (
+                    <option key={index} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))}
+                </select>
+
             {
               loading ? 
-              <button disabled className='flex items-center gap-1 bg-gray-300 rounded-lg text-white py-3 px-6 font-medium focus:scale-90 duration-100'>
+              <button disabled className='flex items-center gap-1 bg-gray-300 rounded-lg text-white py-3 mt-3 px-6 font-medium focus:scale-90 duration-100'>
                 <LoaderCircle className='animate-spin' />
                 Loading...
               </button>
               :
-              <button className='flex items-center gap-1 bg-amber-500 rounded-lg text-white py-3 px-6 font-medium focus:scale-90 duration-100'>
+              <button className='flex items-center gap-1 bg-amber-500 rounded-lg text-white py-3 mt-3 px-6 font-medium focus:scale-90 duration-100'>
                 <Languages />
                 Translate
               </button>

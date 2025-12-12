@@ -3,7 +3,7 @@ import React, { useState,useEffect ,useRef  } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 import { languageOptions } from "./languages";
 import axios from "axios"
-const API_KEY = "AIzaSyBv65qwMmgyN-sLta89GVdhi0LwNuCUa9U";
+const API_KEY = "";
 
 function App() {
 const selectRef = useRef(null);
